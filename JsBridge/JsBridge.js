@@ -15,6 +15,11 @@
  * @return {Object} 回调
  */
 
+/*
+* 方法名通常需要与安卓和苹果规定好
+*
+* */
+
 var JsBridge = {
     init: function(callback) {
         var u = navigator.userAgent;
