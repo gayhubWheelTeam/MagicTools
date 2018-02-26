@@ -60,8 +60,7 @@ function MagicTools() {
             return Object.prototype.toString.call(o) == '[object Array]';
         },
         /**
-         * 数组去重
-         * 遍历数组，建立新数组，利用indexOf判断是否存在于新数组中，不存在则push到新数组，最后返回新数组
+         * 数组去重 es6
          * @param array 原始数组
          * @return [arr] 去重后数组
          */
@@ -74,17 +73,12 @@ function MagicTools() {
             if (array.length == 0) {
                 return new Array();
             }
-            let ret = [];
-            for (var i = 0, j = array.length; i < j; i++) {
-                if (ret.indexOf(array[i]) === -1) {
-                    ret.push(array[i]);
-                }
-            }
+            let ret = [...new Set(array)];
             return ret;
         },
         /*
         * 获取URL地址里的参数
-        *@param name 需要获取到的参数
+        * @param name 需要获取到的参数
         * 如：www.xxx.com?code="abc"------getUrlParam('code')--->'abc'
         * */
         getUrlParam: function (name) {
@@ -95,7 +89,59 @@ function MagicTools() {
                 if (param != null) return decodeURIComponent(param[2]);
                 return null;
             }
-
+        },
+        /**
+         *  浮点数取整
+         *  @param float_num 传递的小数 如123.456
+         *  @returns  int_num 整数 如123
+        */
+        floatToInt: function (float_num) {
+            let temp = float_num;
+            // 先把负数变成正数
+            if (float_num < 0) {
+                temp = Math.abs(float_num);
+            }
+            return Math.floor(temp);
+        },
+        /**
+         * 生成4~6位数字验证码
+         * @param num 验证码位数
+         * @returns code 验证码
+        */
+        validCode: function (num) {
+            if (num < 4 || num > 6 || num == null) {
+                console.error('please enter the number between 4 and 6');
+            } else {
+                return ('000000' + Math.floor(Math.random() * 999999)).slice(-parseInt(num));
+            }
+            
+        },
+        /**
+         * 随机生成16进制颜色代码
+         * @param null
+         * @returns color_code 颜色代码
+        */
+        createColor: function () {
+            return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+        },
+        /**
+         * 获取url查询参数并转为json格式 es5
+         * @param  
+         * @returns obj json对象
+        */
+        getUrlParamToObj: function () {
+            let isParam = window.location.hash.split('?')[1];
+            if (isParam) {
+                let obj = {};
+                isParam.split('&').forEach(function (item) {
+                    (function (kv) {
+                        obj[kv[0]] = kv[1];
+                    })(item.split('='));
+                })
+                return obj;
+            } else {
+                return null;
+            }
         }
     }
 }
